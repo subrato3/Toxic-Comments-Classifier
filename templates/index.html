@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Toxic Comment Classifier</title>
+</head>
+
+<body>
+    <h1>Toxic Comment Classifier</h1>
+    <textarea id="comment" rows="4" cols="50" placeholder="Enter a comment"></textarea>
+    <button id="classifyButton">Classify</button>
+    <p id="prediction"></p> <!-- This element displays the prediction -->
+
+    <script>
+        document.getElementById('classifyButton').addEventListener('click', function () {
+            const comment = document.getElementById('comment').value;
+            if (comment.trim() !== '') {
+                fetch('/classify', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'comment': comment }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const predictionElement = document.getElementById('prediction');
+                        predictionElement.innerHTML = 'Toxicity Score: ' + data.toxicity_score.toFixed(2);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
